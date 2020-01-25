@@ -8,6 +8,7 @@ import io.reactivex.Observer;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import com.sulav.rxjavademo.model.TaskModel;
 import com.sulav.rxjavademo.repository.TaskDataSource;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +35,8 @@ public class MainActivity extends AppCompatActivity {
 //        func2();
 //        func3();
 //        func4();
-        func5();
+//        func5();
+        func6();
 
     }
 
@@ -225,5 +228,45 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    /**
+     * Interval operator returns an Observable that emits an infinite sequence of ascending integers, with a constant interval of time of your choosing between emissions.
+     * TakeWhile operator mirror items emitted by an Observable until a specified condition becomes false
+     */
+    void func6(){
+        Observable.interval(1, TimeUnit.SECONDS)
+                .takeWhile(new Predicate<Long>() {
+                    @Override
+                    public boolean test(Long aLong) throws Exception {
+                        return aLong <= 5;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Long aLong) {
+                        Log.d(TAG, "onNext: "+ aLong);
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "onComplete: ");
+
+                    }
+                });
+
     }
 }
