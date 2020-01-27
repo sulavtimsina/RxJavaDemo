@@ -27,13 +27,24 @@ class TaskDataSource{
         }
 
         /**
-         * Returns the list after 4 seconds
+         * Returns the list after 5 seconds and simulates slow database operation
          */
         @JvmStatic
         fun createTaskListSlow(): List<TaskModel> {
             Thread.sleep(5000)
             return createTasksList()
         }
+
+        /**
+         * Returns the task after 5 seconds and simulates slow database operation
+         */
+        @JvmStatic
+        fun createTaskSlow(): TaskModel {
+            Thread.sleep(5000)
+            return TaskModel("Go Office", true, 11);
+        }
+
+
 
     }
 

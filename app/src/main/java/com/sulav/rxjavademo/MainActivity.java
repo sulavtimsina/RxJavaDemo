@@ -5,7 +5,6 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Predicate;
@@ -17,7 +16,9 @@ import android.util.Log;
 import com.sulav.rxjavademo.model.TaskModel;
 import com.sulav.rxjavademo.repository.TaskDataSource;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,7 +37,10 @@ public class MainActivity extends AppCompatActivity {
 //        func3();
 //        func4();
 //        func5();
-        func6();
+//        func6();
+//        func7();
+//        func8();
+        func9();
 
     }
 
@@ -267,6 +271,168 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
+
+    }
+
+    /**
+     * FromIterable and FromCallable
+     */
+    void func7(){
+        List<String> myList = new ArrayList<>();
+        myList.add("tom");
+        myList.add("dick");
+        myList.add("harry");
+        myList.add("adam");
+        myList.add("pop");
+
+        Observable<String> myObservable = Observable.fromIterable(myList)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+                myObservable.subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        Log.d(TAG, "onNext: "+s);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+        Observable<TaskModel> taskModelObservable = Observable.fromCallable(new Callable<TaskModel>() {
+            @Override
+            public TaskModel call() throws Exception {
+                return TaskDataSource.createTaskSlow();
+            }
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+
+        taskModelObservable.subscribe(new Observer<TaskModel>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(TaskModel taskModels) {
+                Log.d(TAG, "onNext: "+taskModels.toString());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    /**
+     * Filter String Observable
+     */
+    void func8(){
+        List<String> myList = new ArrayList<>();
+        myList.add("tom");
+        myList.add("dick");
+        myList.add("harry");
+        myList.add("adam");
+        myList.add("pop");
+
+        Observable<String> myObservable = Observable.fromIterable(myList)
+                .filter(new Predicate<String>() {
+                    @Override
+                    public boolean test(String s) throws Exception {
+                        if(s.length() > 3)
+                            return true;
+                        return false;
+                    }
+
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        myObservable.subscribe(new Observer<String>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(String s) {
+                Log.d(TAG, "onNext: "+s);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+
+    }
+
+    /**
+     * Filter custom object
+     */
+    void func9(){
+        List<TaskModel> myList = TaskDataSource.createTasksList();
+
+
+        Observable<TaskModel> listObservable = Observable.fromIterable(myList)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter(new Predicate<TaskModel>() {
+            @Override
+            public boolean test(TaskModel taskModel) throws Exception {
+                if(taskModel.getCompleted())
+                    return true;
+                return false;
+            }
+        });
+
+        listObservable.subscribe(new Observer<TaskModel>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(TaskModel taskModel) {
+                Log.d(TAG, "onNext: "+taskModel.toString());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+
 
     }
 }
