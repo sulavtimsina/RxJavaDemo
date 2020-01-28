@@ -1,6 +1,7 @@
 package com.sulav.rxjavademo.repository
 
 import com.sulav.rxjavademo.model.TaskModel
+import io.reactivex.Observable
 
 class TaskDataSource{
 
@@ -36,12 +37,12 @@ class TaskDataSource{
         }
 
         /**
-         * Returns the task after 5 seconds and simulates slow database operation
+         * Returns the Observable task after 5 seconds and simulates slow database operation
          */
         @JvmStatic
-        fun createTaskSlow(): TaskModel {
+        fun createObservableTaskSlow(): Observable<TaskModel> {
             Thread.sleep(5000)
-            return TaskModel("Go Office", true, 11);
+            return Observable.just(TaskModel("Go Office", true, 11))
         }
 
 

@@ -38,9 +38,9 @@ public class MainActivity extends AppCompatActivity {
 //        func4();
 //        func5();
 //        func6();
-//        func7();
+        func7();
 //        func8();
-        func9();
+//        func9();
 
     }
 
@@ -292,6 +292,7 @@ public class MainActivity extends AppCompatActivity {
                 myObservable.subscribe(new Observer<String>() {
                     @Override
                     public void onSubscribe(Disposable d) {
+                        Log.d(TAG, "onSubscribe: to String emission");
 
                     }
 
@@ -307,28 +308,30 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onComplete() {
+                        Log.d(TAG, "onComplete: of String emission");
 
                     }
                 });
 
-        Observable<TaskModel> taskModelObservable = Observable.fromCallable(new Callable<TaskModel>() {
+        /*From Callable*/
+        Observable<List<TaskModel>> taskModelObservable = Observable.fromCallable(new Callable<List<TaskModel>>() {
             @Override
-            public TaskModel call() throws Exception {
-                return TaskDataSource.createTaskSlow();
+            public List<TaskModel> call() throws Exception {
+                return TaskDataSource.createTaskListSlow();
             }
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-
-        taskModelObservable.subscribe(new Observer<TaskModel>() {
+        taskModelObservable.subscribe(new Observer<List<TaskModel>>() {
             @Override
             public void onSubscribe(Disposable d) {
+                Log.d(TAG, "onSubscribe: to Callable");
 
             }
 
             @Override
-            public void onNext(TaskModel taskModels) {
+            public void onNext(List<TaskModel> taskModels) {
                 Log.d(TAG, "onNext: "+taskModels.toString());
             }
 
@@ -432,7 +435,34 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
 
+
+    void func10(){
+        Observable<TaskModel> modelObservable = TaskDataSource.createObservableTaskSlow();
+        modelObservable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<TaskModel>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(TaskModel taskModel) {
+                        Log.d(TAG, "onNext: "+taskModel.toString());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
 
     }
 }
