@@ -12,6 +12,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.sulav.rxjavademo.model.TaskModel;
 import com.sulav.rxjavademo.repository.TaskDataSource;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 //        func4();
 //        func5();
 //        func6();
-        func7();
+//        func7();
 //        func8();
 //        func9();
 
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Will create Observable using just
      */
-    void func1() {
+    public void func1(View view) {
         Observer<String> observer = new Observer<String>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNext(String s) {
-                Log.d(TAG, "onNext: ");
+                Log.d(TAG, "onNext: "+s);
             }
 
             @Override
@@ -79,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Will create Observable using create()
      */
-    void func2(){
+    void func2(View view){
         // This taskmodel will be emitted by the Observable
         final TaskModel taskModel = new TaskModel("Eat Food", false, 2);
         // Create Observable
@@ -124,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Will create Observable which emits list of Objects using create()
      */
-    void func3(){
+    void func3(View view){
         Log.d(TAG, "func3: Calling createTaskListSlow Now....");
         final List<TaskModel> taskModelList = TaskDataSource.createTaskListSlow();
         //Create Observable
@@ -172,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Will Create Observable using just. Just can emit maximum 4 objects
      */
-    void func4(){
+    void func4(View view){
         Observable.just("one", "two", "three", "four")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -185,7 +186,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onNext(String s) {
                         Log.d(TAG, "onNext: "+s);
-        
                     }
 
                     @Override
@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
      * range will generate range of objects from minimum(inclusive) to maximum(exclusive) value
      * repeat must be used in conjunction with another operator, it will repeat the emission n times
      */
-    void func5(){
+    void func5(View view){
         Observable.range(0,4)
                 .repeat(2)
                 .subscribeOn(Schedulers.io())
@@ -238,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
      * Interval operator returns an Observable that emits an infinite sequence of ascending integers, with a constant interval of time of your choosing between emissions.
      * TakeWhile operator mirror items emitted by an Observable until a specified condition becomes false
      */
-    void func6(){
+    void func6(View view){
         Observable.interval(1, TimeUnit.SECONDS)
                 .takeWhile(new Predicate<Long>() {
                     @Override
@@ -277,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * FromIterable and FromCallable
      */
-    void func7(){
+    void func7(View view){
         List<String> myList = new ArrayList<>();
         myList.add("tom");
         myList.add("dick");
@@ -350,7 +350,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Filter String Observable
      */
-    void func8(){
+    void func8(View view){
         List<String> myList = new ArrayList<>();
         myList.add("tom");
         myList.add("dick");
@@ -398,7 +398,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Filter custom object
      */
-    void func9(){
+    void func9(View view){
         List<TaskModel> myList = TaskDataSource.createTasksList();
 
 
@@ -438,7 +438,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    void func10(){
+    void func10(View view){
         Observable<TaskModel> modelObservable = TaskDataSource.createObservableTaskSlow();
         modelObservable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

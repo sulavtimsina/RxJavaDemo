@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="btnMarginTopWithButton">16dp</dimen>
+    <dimen name="btnMarginLeftWithParent">16dp</dimen>
+    <dimen name="btnMarginTopWithParent">55dp</dimen>
+</resources>
