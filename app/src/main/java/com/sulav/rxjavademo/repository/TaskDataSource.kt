@@ -46,6 +46,12 @@ class TaskDataSource{
         }
 
 
+        @JvmStatic
+        fun getStringList(): List<String>{
+            return listOf("tom", "dick", "harry", "adam", "pop")
+        }
+
+
 
     }
 

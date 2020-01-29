@@ -277,12 +277,7 @@ public class MainActivity extends AppCompatActivity {
      * FromIterable and FromCallable
      */
     public void func7(View view){
-        List<String> myList = new ArrayList<>();
-        myList.add("tom");
-        myList.add("dick");
-        myList.add("harry");
-        myList.add("adam");
-        myList.add("pop");
+        List<String> myList = TaskDataSource.getStringList();
 
         Observable<String> myObservable = Observable.fromIterable(myList)
                 .subscribeOn(Schedulers.io())
@@ -356,6 +351,7 @@ public class MainActivity extends AppCompatActivity {
         myList.add("harry");
         myList.add("adam");
         myList.add("pop");
+        Log.d(TAG, "Filtering items whose length is > 3");
 
         Observable<String> myObservable = Observable.fromIterable(myList)
                 .filter(new Predicate<String>() {
@@ -436,7 +432,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * creates observable from method which returns observable
+     * @param view
+     */
     public void func10(View view){
         Observable<TaskModel> modelObservable = TaskDataSource.createObservableTaskSlow();
         modelObservable.subscribeOn(Schedulers.io())
@@ -444,7 +443,7 @@ public class MainActivity extends AppCompatActivity {
                 .subscribe(new Observer<TaskModel>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
+                        Log.d(TAG, "onSubscribe called ");
                     }
 
                     @Override
@@ -459,7 +458,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onComplete() {
-
+                        Log.d(TAG, "onComplete called");
                     }
                 });
 
